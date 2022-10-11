@@ -43,6 +43,11 @@ public class PlayerPhysics : MonoBehaviour
         EventManager.GripEvent += Grip;
     }
 
+    private void OnDisable()
+    {
+        EventManager.GripEvent += Grip;
+    }
+
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
