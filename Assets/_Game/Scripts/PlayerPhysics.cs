@@ -15,7 +15,6 @@ public class PlayerPhysics : MonoBehaviour
     [SerializeField] private float gripLerpSpeed;
 
     private Rigidbody targetRb;
-    private Rigidbody lastRb;
 
     private Vector3 mouseDownPosition;
     private Vector3 currentMousePosition;
@@ -28,6 +27,7 @@ public class PlayerPhysics : MonoBehaviour
     private bool jumping;
     private bool gripping;
     private bool onGround;
+    private bool isDead;
 
     private float initialMass = 3.75f;
 
@@ -41,11 +41,13 @@ public class PlayerPhysics : MonoBehaviour
     private void OnEnable()
     {
         EventManager.GripEvent += Grip;
+        EventManager.KillPlayerEvent += KillPlayer;
     }
 
     private void OnDisable()
     {
-        EventManager.GripEvent += Grip;
+        EventManager.GripEvent -= Grip;
+        EventManager.KillPlayerEvent -= KillPlayer;
     }
 
     private void Update()
@@ -95,14 +97,17 @@ public class PlayerPhysics : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (onGround)
+        if (!isDead)
         {
-            Balance();
-        }
+            if (onGround)
+            {
+                Balance();
+            }
 
-        if (jumping)
-        {
-            Jump();
+            if (jumping)
+            {
+                Jump();
+            }
         }
     }
 
@@ -123,7 +128,7 @@ public class PlayerPhysics : MonoBehaviour
 
     private void Grip(GameObject grip)
     {
-        if (targetRb != null)
+        if (targetRb != null && !isDead)
         {
             lastGrip = grip;
 
@@ -138,6 +143,14 @@ public class PlayerPhysics : MonoBehaviour
 
             StartCoroutine(AutoDestroyGrip());
         }
+    }
+
+    private void KillPlayer()
+    {
+        isDead = true;
+        jumping = false;
+        gripping = false;
+        targetRb.isKinematic = false;
     }
 
     private IEnumerator AutoDestroyGrip()
