@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerPhysics : MonoBehaviour
@@ -68,7 +69,10 @@ public class PlayerPhysics : MonoBehaviour
         }
         else if (Input.GetMouseButtonUp(0))
         {
-            Destroy(lastGrip);
+            if (lastGrip != null)
+            {
+                Destroy(lastGrip);
+            }
 
             Vector3 diffence = currentMousePosition - mouseDownPosition;
 
@@ -125,8 +129,17 @@ public class PlayerPhysics : MonoBehaviour
 
             targetRb.mass = initialMass;
 
-            targetRb = null;
+            StartCoroutine(AutoDestroyGrip());
         }
+    }
+
+    private IEnumerator AutoDestroyGrip()
+    {
+        yield return new WaitForSeconds(2f);
+
+        targetRb.isKinematic = false;
+
+        Destroy(lastGrip);
     }
 
     private void CheckOnGround()
