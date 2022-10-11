@@ -140,7 +140,7 @@ public class PlayerPhysics : MonoBehaviour
 
     private IEnumerator AutoDestroyGrip()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSecondsRealtime(2f);
 
         targetRb.isKinematic = false;
 
