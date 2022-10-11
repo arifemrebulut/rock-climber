@@ -46,6 +46,8 @@ public class PlayerPhysics : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            direction = Vector3.zero;
+
             mouseDownPosition = Input.mousePosition;
 
             if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hit, maxDistance, handRayLayer))
@@ -102,7 +104,7 @@ public class PlayerPhysics : MonoBehaviour
 
     private void Jump()
     {
-        if (targetRb != null)
+        if (targetRb != null && direction != Vector3.zero)
         {
             float initialMass = targetRb.mass;
             targetRb.mass *= 2;
