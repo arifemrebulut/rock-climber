@@ -127,6 +127,8 @@ public class PlayerPhysics : MonoBehaviour
         {
             lastGrip = grip;
 
+            grip.GetComponent<Collider>().enabled = false;
+
             jumping = false;
             gripping = true;
             targetRb.isKinematic = true;
