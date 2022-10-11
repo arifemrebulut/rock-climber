@@ -11,10 +11,11 @@ GameObject:
   - component: {fileID: 9010695185263549586}
   - component: {fileID: 5378335973631054647}
   - component: {fileID: 7874340931475548157}
-  - component: {fileID: 864785451255347421}
+  - component: {fileID: 542173748448052186}
+  - component: {fileID: 3455944343855100771}
   m_Layer: 0
   m_Name: HandGrip
-  m_TagString: Untagged
+  m_TagString: Grip
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,16 +85,29 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &864785451255347421
-SphereCollider:
+--- !u!136 &542173748448052186
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8522986614694381096}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 2
   m_Radius: 0.12699999
-  m_Center: {x: -0.127, y: 0, z: 0.12699999}
+  m_Height: 0.6
+  m_Direction: 2
+  m_Center: {x: -0.127, y: 0.063499995, z: 0}
+--- !u!114 &3455944343855100771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8522986614694381096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7b920c19179f2145891ac2387559415, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

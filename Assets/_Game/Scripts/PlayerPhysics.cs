@@ -11,8 +11,10 @@ public class PlayerPhysics : MonoBehaviour
 
     [SerializeField] private float jumpForce;
     [SerializeField] private float balanceForce;
+    [SerializeField] private float gripLerpSpeed;
 
     private Rigidbody targetRb;
+    private Rigidbody lastRb;
 
     private Vector3 mouseDownPosition;
     private Vector3 currentMousePosition;
@@ -23,11 +25,21 @@ public class PlayerPhysics : MonoBehaviour
     private float maxDistance = 100f;
 
     private bool jumping;
+    private bool gripping;
     private bool onGround;
+
+    private float initialMass = 3.75f;
+
+    private GameObject lastGrip;
 
     private void Awake()
     {
         mainCamera = Camera.main;
+    }
+
+    private void OnEnable()
+    {
+        EventManager.GripEvent += Grip;
     }
 
     private void Update()
@@ -40,12 +52,10 @@ public class PlayerPhysics : MonoBehaviour
             {
                 if (hit.transform.CompareTag("RightHand"))
                 {
-                    Debug.Log("HIT RIGHT");
                     targetRb = rightHandRb;
                 }
                 else if (hit.transform.CompareTag("LeftHand"))
                 {
-                    Debug.Log("HIT LEFT");
                     targetRb = leftHandRb;
                 }
             }
@@ -56,10 +66,15 @@ public class PlayerPhysics : MonoBehaviour
         }
         else if (Input.GetMouseButtonUp(0))
         {
+            Destroy(lastGrip);
+
             Vector3 diffence = currentMousePosition - mouseDownPosition;
 
             direction = new Vector3(diffence.x, diffence.y, 0f).normalized;
 
+            gripping = false;
+            leftHandRb.isKinematic = false;
+            rightHandRb.isKinematic = false;
             jumping = true;
         }
 
@@ -89,7 +104,26 @@ public class PlayerPhysics : MonoBehaviour
     {
         if (targetRb != null)
         {
+            float initialMass = targetRb.mass;
+            targetRb.mass *= 2;
             targetRb.velocity = direction * jumpForce * Time.fixedDeltaTime;
+        }
+    }
+
+    private void Grip(GameObject grip)
+    {
+        if (targetRb != null)
+        {
+            lastGrip = grip;
+
+            jumping = false;
+            gripping = true;
+            targetRb.isKinematic = true;
+            targetRb.MovePosition(grip.transform.position);
+
+            targetRb.mass = initialMass;
+
+            targetRb = null;
         }
     }
 
